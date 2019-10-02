@@ -78,3 +78,20 @@ and that should, if those are valid credentials, return a 200 OK with an Authori
 
 ## Testing
 You must implement unit tests demonstrating at least 80% code coverage.
+
+```
+docker build -t ecommerce-app .
+```
+
+```
+docker run -p 8080:8080 -t ecommerce-app
+```
+
+```
+SPLUNK_STANDALONE_URL=<splunk-server-name>:<splunk-receive-port> SPLUNK_PASSWORD=<password> docker-compose up
+```
+
+example - 
+```
+SPLUNK_STANDALONE_URL=11.22.33.44:9997 SPLUNK_PASSWORD=splunkpass docker-compose up
+```
