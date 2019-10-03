@@ -1,26 +1,56 @@
 version: '3.7'
 services:
   ecommerceapp:
-    build: .
+    image: rajashekr/ecommerceapp:latest
     environment:
       - LOGGING_FILE=/logs/ecommerceapp-application.log
     ports:
-      - "8080:8080"
+      - "8081:8080"
     volumes:
       - log_volume:/logs
+  jenkins:
+    image: jenkins/jenkins:lts
+    user: root
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+      - "50000:50000"
+    restart: always  
+    volumes:
+      - ./jenkins_data:/var/jenkins_home
+      - ./home:/home
+      - /var/run/docker.sock:/var/run/docker.sock
+  splunkenterprise:
+    hostname: splunkenterprise
+    image: splunk/splunk:7.0.3
+    environment:
+      SPLUNK_START_ARGS: --accept-license
+      SPLUNK_ENABLE_LISTEN: 9997
+      SPLUNK_ADD: tcp 1514
+      SPLUNK_USER: root
+      SPLUNK_PASSWORD: Splunk@123
+    volumes:
+      - opt-splunk-etc:/opt/splunk/etc
+      - opt-splunk-var:/opt/splunk/var
+    ports:
+      - "8000:8000"
+      - "9997:9997"
+      - "8088:8088"
+      - "1514:1514"
   splunkforwarder:
-    image: splunk/universalforwarder:latest
+    image: splunk/universalforwarder:7.0.3
     hostname: splunkforwarder
     environment:
       - SPLUNK_START_ARGS=--accept-license --answer-yes
-      - SPLUNK_STANDALONE_URL
+      - SPLUNK_FORWARD_SERVER=splunkenterprise:9997
       - SPLUNK_USER=root
-      - SPLUNK_PASSWORD
+      - SPLUNK_PASSWORD=Test@123
       - SPLUNK_ADD=monitor /logs
     restart: always
-    depends_on:
-      - ecommerceapp
     volumes:
       - log_volume:/logs
+    ports:
+      - "9088:8088"
+      - "9089:8089"
 volumes:
   log_volume:      

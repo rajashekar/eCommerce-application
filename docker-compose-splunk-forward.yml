@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+  splunkforwarder:
+    image: splunk/universalforwarder:7.0.3
+    hostname: splunkforwarder
+    environment:
+      - SPLUNK_START_ARGS=--accept-license --answer-yes
+      - SPLUNK_FORWARD_SERVER=splunkenterprise:9997
+      - SPLUNK_USER=root
+      - SPLUNK_PASSWORD=Test@123
+      - SPLUNK_ADD=monitor /logs
+    restart: always
+    volumes:
+      - log_volume:/logs
+    ports:
+      - "9088:8088"
+      - "9089:8089"
+volumes:
+  log_volume:      

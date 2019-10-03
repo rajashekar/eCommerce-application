@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  ecommerceapp:
+    build: .
+    environment:
+      - LOGGING_FILE=/logs/ecommerceapp-application.log
+    ports:
+      - "8080:8080"
+    volumes:
+      - log_volume:/logs
+  splunkforwarder:
+    image: splunk/universalforwarder:latest
+    hostname: splunkforwarder
+    environment:
+      - SPLUNK_START_ARGS=--accept-license --answer-yes
+      - SPLUNK_STANDALONE_URL
+      - SPLUNK_USER=root
+      - SPLUNK_PASSWORD
+      - SPLUNK_ADD=monitor /logs
+    restart: always
+    depends_on:
+      - ecommerceapp
+    volumes:
+      - log_volume:/logs
+volumes:
+  log_volume:      

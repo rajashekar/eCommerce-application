@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  ecommerceapp:
+    image: rajashekr/ecommerceapp:latest
+    environment:
+      - LOGGING_FILE=/logs/ecommerceapp-application.log
+    ports:
+      - "8081:8080"
+    volumes:
+      - log_volume:/logs
+volumes:
+  log_volume:      
