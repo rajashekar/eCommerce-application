@@ -9,7 +9,7 @@ services:
     volumes:
       - log_volume:/logs
   jenkins:
-    image: jenkinsci/blueocean
+    image: jenkins/jenkins:lts
     user: root
     ports:
       - "8080:8080"
