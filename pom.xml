@@ -9,14 +9,15 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>auth-course</artifactId>
+	<artifactId>ecommerceapp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>auth-course</name>
+	<name>ecommerceapp</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
 		<java.version>1.8</java.version>
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+		<maven.deploy.skip>true</maven.deploy.skip>
 	</properties>
 
 	<dependencies>
@@ -95,6 +96,28 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.12</version>
+                <executions>
+                    <execution>
+                        <id>build-image</id>
+                        <phase>package</phase>
+                        <goals>
+							<goal>build</goal>
+							<goal>tag</goal>
+							<goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+					<useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+					<repository>registry.hub.docker.com/rajashekr/${project.artifactId}</repository>
+					<dockerfile>Dockerfile</dockerfile>
+					<tag>${project.version}</tag>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 

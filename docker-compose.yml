@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   ecommerceapp:
-    image: rajashekr/ecommerceapp:latest
+    image: rajashekr/ecommerceapp:0.0.1-SNAPSHOT
     environment:
       - LOGGING_FILE=/logs/ecommerceapp-application.log
     ports:
