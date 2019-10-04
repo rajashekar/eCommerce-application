@@ -95,3 +95,14 @@ example -
 ```
 SPLUNK_STANDALONE_URL=11.22.33.44:9997 SPLUNK_PASSWORD=splunkpass docker-compose up
 ```
+
+```
+sudo yum install git
+sudo yum install docker
+sudo usermod -a -G docker $USER
+sudo service docker start
+git clone https://github.com/rajashekar/eCommerce-application.git
+sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose up
+```
