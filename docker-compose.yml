@@ -54,3 +54,5 @@ services:
       - "9089:8089"
 volumes:
   log_volume:      
+  opt-splunk-etc:
+  opt-splunk-var:
