@@ -1,0 +1,260 @@
+[ec2-user@ip-172-31-47-128 eCommerce-application]$ docker-compose up
+Creating network "ecommerce-application_default" with the default driver
+Creating volume "ecommerce-application_log_volume" with default driver
+Creating volume "ecommerce-application_opt-splunk-etc" with default driver
+Creating volume "ecommerce-application_opt-splunk-var" with default driver
+Pulling ecommerceapp (rajashekr/ecommerceapp:latest)...
+latest: Pulling from rajashekr/ecommerceapp
+e7c96db7181b: Pull complete
+f910a506b6cb: Pull complete
+c2274a1a0e27: Pull complete
+b55f4b9001ce: Pull complete
+Digest: sha256:8427bfa4bf5a0bab65be2df03319abe5c469ad0bc95601fc66bc8e53ab4fab20
+Status: Downloaded newer image for rajashekr/ecommerceapp:latest
+Pulling jenkins (jenkins/jenkins:lts)...
+lts: Pulling from jenkins/jenkins
+092586df9206: Pull complete
+ef599477fae0: Pull complete
+4530c6472b5d: Pull complete
+d34d61487075: Pull complete
+272f46008219: Pull complete
+12ff6ccfe7a6: Pull complete
+f26b99e1adb1: Pull complete
+b5a7230f28ac: Pull complete
+d19ccd039899: Pull complete
+0cd916c5652e: Pull complete
+e7f33481e423: Pull complete
+3c8f6834c187: Pull complete
+aed304377df9: Pull complete
+841ddf9b4483: Pull complete
+84beffd862a8: Pull complete
+2643324effeb: Pull complete
+2b8c3739eb59: Pull complete
+42423eff2b9e: Pull complete
+ce3c0ae47fcb: Pull complete
+Digest: sha256:bf741663dff2c5c163bd16706d4d1b9e6f86fa7b92e365257e170239d0bfb24f
+Status: Downloaded newer image for jenkins/jenkins:lts
+Pulling splunkenterprise (splunk/splunk:7.0.3)...
+7.0.3: Pulling from splunk/splunk
+f2b6b4884fc8: Pull complete
+90ebebe7577c: Pull complete
+83957a1c1e22: Pull complete
+4974ebb1526c: Pull complete
+00ac183a2748: Pull complete
+ce82d0957a21: Pull complete
+cb71dfe9925b: Pull complete
+Digest: sha256:769e686ef7602a968fa4962662c39a0352ba7ce923a6b96807ee016e59a89517
+Status: Downloaded newer image for splunk/splunk:7.0.3
+Pulling splunkforwarder (splunk/universalforwarder:7.0.3)...
+7.0.3: Pulling from splunk/universalforwarder
+f2b6b4884fc8: Already exists
+2c392a0c67d2: Pull complete
+90e3f0ccde0d: Pull complete
+eea58aed0abe: Pull complete
+70bea1b0e7b2: Pull complete
+76a2087b582b: Pull complete
+Digest: sha256:3a2a3bbf3ec0f586e26dc5ea9c2f444301b03a788e5fd71b359a35722d25c9d5
+Status: Downloaded newer image for splunk/universalforwarder:7.0.3
+Creating ecommerce-application_splunkenterprise_1 ... done
+Creating ecommerce-application_jenkins_1          ... done
+Creating ecommerce-application_splunkforwarder_1  ... done
+Creating ecommerce-application_ecommerceapp_1     ... done
+Attaching to ecommerce-application_jenkins_1, ecommerce-application_ecommerceapp_1, ecommerce-application_splunkforwarder_1, ecommerce-application_splunkenterprise_1
+jenkins_1           | Running from: /usr/share/jenkins/jenkins.war
+jenkins_1           | webroot: EnvVars.masterEnvVars.get("JENKINS_HOME")
+splunkforwarder_1   |
+splunkforwarder_1   | This appears to be your first time running this version of Splunk.
+splunkforwarder_1   |
+splunkforwarder_1   | Splunk> Take the sh out of IT.
+splunkforwarder_1   |
+splunkforwarder_1   | Checking prerequisites...
+splunkforwarder_1   |     Checking mgmt port [8089]: open
+ecommerceapp_1      | SLF4J: Class path contains multiple SLF4J bindings.
+ecommerceapp_1      | SLF4J: Found binding in [jar:file:/app.jar!/BOOT-INF/lib/logback-classic-1.2.3.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+ecommerceapp_1      | SLF4J: Found binding in [jar:file:/app.jar!/BOOT-INF/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+ecommerceapp_1      | SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+jenkins_1           | 2019-10-04 00:44:17.019+0000 [id=1]    INFO    org.eclipse.jetty.util.log.Log#initialized: Logging initialized @2870ms to org.eclipse.jetty.util.log.JavaUtilLog
+ecommerceapp_1      | SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+splunkforwarder_1   | New certs have been generated in '/opt/splunk/etc/auth'.
+jenkins_1           | 2019-10-04 00:44:17.805+0000 [id=1]    INFO    winstone.Logger#logInternal: Beginning extraction from war file
+splunkforwarder_1   |         Creating: /opt/splunk/var/lib/splunk
+splunkforwarder_1   |         Creating: /opt/splunk/var/run/splunk
+splunkforwarder_1   |         Creating: /opt/splunk/var/run/splunk/appserver/i18n
+splunkforwarder_1   |         Creating: /opt/splunk/var/run/splunk/appserver/modules/static/css
+splunkforwarder_1   |         Creating: /opt/splunk/var/run/splunk/upload
+splunkforwarder_1   |         Creating: /opt/splunk/var/spool/splunk
+splunkforwarder_1   |         Creating: /opt/splunk/var/spool/dirmoncache
+splunkforwarder_1   |         Creating: /opt/splunk/var/lib/splunk/authDb
+splunkforwarder_1   |         Creating: /opt/splunk/var/lib/splunk/hashDb
+splunkforwarder_1   |     Checking conf files for problems...
+splunkforwarder_1   |     Done
+splunkforwarder_1   |     Checking default conf files for edits...
+splunkforwarder_1   |     Validating installed files against hashes from '/opt/splunk/splunkforwarder-7.0.3-fa31da744b51-linux-2.6-x86_64-manifest'
+splunkforwarder_1   |     All installed files intact.
+splunkforwarder_1   |     Done
+splunkforwarder_1   | All preliminary checks passed.
+splunkforwarder_1   |
+splunkforwarder_1   | Starting splunk server daemon (splunkd)...
+splunkforwarder_1   | Done
+splunkforwarder_1   |
+splunkforwarder_1   | Added forwarding to: splunkenterprise:9997.
+ecommerceapp_1      |
+ecommerceapp_1      |   .   ____          _            __ _ _
+ecommerceapp_1      |  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+ecommerceapp_1      | ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ecommerceapp_1      |  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+ecommerceapp_1      |   '  |____| .__|_| |_|_| |_\__, | / / / /
+ecommerceapp_1      |  =========|_|==============|___/=/_/_/_/
+ecommerceapp_1      |  :: Spring Boot ::        (v2.1.7.RELEASE)
+ecommerceapp_1      |
+splunkforwarder_1   | Added monitor of '/logs'.
+jenkins_1           | 2019-10-04 00:44:23.373+0000 [id=1]    WARNING    o.e.j.s.handler.ContextHandler#setContextPath: Empty contextPath
+ecommerceapp_1      | 2019-10-04 00:44:23.550  INFO 1 --- [           main] com.example.demo.SareetaApplication      : Starting SareetaApplication v0.0.1-SNAPSHOT on 0cf63686b6bf with PID 1 (/app.jar started by root in /)
+ecommerceapp_1      | 2019-10-04 00:44:23.589  INFO 1 --- [           main] com.example.demo.SareetaApplication      : No active profile set, falling back to default profiles: default
+jenkins_1           | 2019-10-04 00:44:23.630+0000 [id=1]    INFO    org.eclipse.jetty.server.Server#doStart: jetty-9.4.z-SNAPSHOT; built: 2019-05-02T00:04:53.875Z; git: e1bc35120a6617ee3df052294e433f3a25ce7097; jvm 1.8.0_222-b10
+jenkins_1           | 2019-10-04 00:44:25.006+0000 [id=1]    INFO    o.e.j.w.StandardDescriptorProcessor#visitServlet: NO JSP Support for /, did not find org.eclipse.jetty.jsp.JettyJspServlet
+jenkins_1           | 2019-10-04 00:44:25.281+0000 [id=1]    INFO    o.e.j.s.s.DefaultSessionIdManager#doStart: DefaultSessionIdManager workerName=node0
+jenkins_1           | 2019-10-04 00:44:25.282+0000 [id=1]    INFO    o.e.j.s.s.DefaultSessionIdManager#doStart: No SessionScavenger set, using defaults
+jenkins_1           | 2019-10-04 00:44:25.302+0000 [id=1]    INFO    o.e.j.server.session.HouseKeeper#startScavenging: node0 Scavenging every 600000ms
+jenkins_1           | Jenkins home directory: /var/jenkins_home found at: EnvVars.masterEnvVars.get("JENKINS_HOME")
+jenkins_1           | 2019-10-04 00:44:27.815+0000 [id=1]    INFO    o.e.j.s.handler.ContextHandler#doStart: Started w.@53499d85{Jenkins v2.190.1,/,file:///var/jenkins_home/war/,AVAILABLE}{/var/jenkins_home/war}
+jenkins_1           | 2019-10-04 00:44:27.929+0000 [id=1]    INFO    o.e.j.server.AbstractConnector#doStart: Started ServerConnector@302c971f{HTTP/1.1,[http/1.1]}{0.0.0.0:8080}
+jenkins_1           | 2019-10-04 00:44:27.933+0000 [id=1]    INFO    org.eclipse.jetty.server.Server#doStart: Started @13789ms
+jenkins_1           | 2019-10-04 00:44:27.938+0000 [id=20]    INFO    winstone.Logger#logInternal: Winstone Servlet Engine v4.0 running: controlPort=disabled
+ecommerceapp_1      | 2019-10-04 00:44:29.525  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+ecommerceapp_1      | 2019-10-04 00:44:30.045  INFO 1 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 468ms. Found 4 repository interfaces.
+jenkins_1           | 2019-10-04 00:44:31.735+0000 [id=26]    INFO    jenkins.InitReactorRunner$1#onAttained: Started initialization
+jenkins_1           | 2019-10-04 00:44:31.874+0000 [id=25]    INFO    jenkins.InitReactorRunner$1#onAttained: Listed all plugins
+ecommerceapp_1      | 2019-10-04 00:44:33.947  INFO 1 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$456dd1de] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+ecommerceapp_1      | 2019-10-04 00:44:35.932  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+ecommerceapp_1      | 2019-10-04 00:44:36.201  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+ecommerceapp_1      | 2019-10-04 00:44:36.203  INFO 1 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.22]
+ecommerceapp_1      | 2019-10-04 00:44:36.852  INFO 1 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+ecommerceapp_1      | 2019-10-04 00:44:36.855  INFO 1 --- [           main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 12670 ms
+jenkins_1           | 2019-10-04 00:44:37.968+0000 [id=26]    INFO    jenkins.InitReactorRunner$1#onAttained: Prepared all plugins
+jenkins_1           | 2019-10-04 00:44:37.993+0000 [id=26]    INFO    jenkins.InitReactorRunner$1#onAttained: Started all plugins
+jenkins_1           | 2019-10-04 00:44:38.089+0000 [id=25]    INFO    jenkins.InitReactorRunner$1#onAttained: Augmented all extensions
+ecommerceapp_1      | 2019-10-04 00:44:38.142  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+ecommerceapp_1      | 2019-10-04 00:44:39.226  INFO 1 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+ecommerceapp_1      | 2019-10-04 00:44:39.587  INFO 1 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+ecommerceapp_1      |     name: default
+ecommerceapp_1      |     ...]
+ecommerceapp_1      | 2019-10-04 00:44:39.962  INFO 1 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.10.Final}
+ecommerceapp_1      | 2019-10-04 00:44:39.997  INFO 1 --- [           main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+jenkins_1           | 2019-10-04 00:44:40.665+0000 [id=25]    INFO    jenkins.InitReactorRunner$1#onAttained: Loaded all jobs
+ecommerceapp_1      | 2019-10-04 00:44:40.835  INFO 1 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+ecommerceapp_1      | 2019-10-04 00:44:42.319  INFO 1 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+jenkins_1           | 2019-10-04 00:44:42.325+0000 [id=39]    INFO    hudson.model.AsyncPeriodicWork$1#run: Started Download metadata
+jenkins_1           | 2019-10-04 00:44:42.388+0000 [id=39]    INFO    hudson.util.Retrier#start: Attempt #1 to do the action check updates server
+ecommerceapp_1      | 2019-10-04 00:44:46.029  INFO 1 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+jenkins_1           | 2019-10-04 00:44:46.480+0000 [id=25]    INFO    o.s.c.s.AbstractApplicationContext#prepareRefresh: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@35d5dc5b: display name [Root WebApplicationContext]; startup date [Fri Oct 04 00:44:46 UTC 2019]; root of context hierarchy
+jenkins_1           | 2019-10-04 00:44:46.495+0000 [id=25]    INFO    o.s.c.s.AbstractApplicationContext#obtainFreshBeanFactory: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@35d5dc5b]: org.springframework.beans.factory.support.DefaultListableBeanFactory@15027963
+jenkins_1           | 2019-10-04 00:44:46.610+0000 [id=25]    INFO    o.s.b.f.s.DefaultListableBeanFactory#preInstantiateSingletons: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@15027963: defining beans [authenticationManager]; root of factory hierarchy
+jenkins_1           | 2019-10-04 00:44:48.440+0000 [id=25]    INFO    o.s.c.s.AbstractApplicationContext#prepareRefresh: Refreshing org.springframework.web.context.support.StaticWebApplicationContext@315788dc: display name [Root WebApplicationContext]; startup date [Fri Oct 04 00:44:48 UTC 2019]; root of context hierarchy
+jenkins_1           | 2019-10-04 00:44:48.461+0000 [id=25]    INFO    o.s.c.s.AbstractApplicationContext#obtainFreshBeanFactory: Bean factory for application context [org.springframework.web.context.support.StaticWebApplicationContext@315788dc]: org.springframework.beans.factory.support.DefaultListableBeanFactory@4dd23e47
+jenkins_1           | 2019-10-04 00:44:48.482+0000 [id=25]    INFO    o.s.b.f.s.DefaultListableBeanFactory#preInstantiateSingletons: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@4dd23e47: defining beans [filter,legacy]; root of factory hierarchy
+ecommerceapp_1      | 2019-10-04 00:44:49.688  INFO 1 --- [           main] c.e.demo.security.WebSecurityConfig      : configuring bcrypt password encoder
+ecommerceapp_1      | 2019-10-04 00:44:50.090  INFO 1 --- [           main] c.e.demo.security.WebSecurityConfig      : Disabling cors and csrf
+ecommerceapp_1      | 2019-10-04 00:44:50.095  INFO 1 --- [           main] c.e.demo.security.WebSecurityConfig      : create stateless sessions
+ecommerceapp_1      | 2019-10-04 00:44:50.101  INFO 1 --- [           main] c.e.demo.security.WebSecurityConfig      : Configuring JWT authentication and authorization filter
+ecommerceapp_1      | 2019-10-04 00:44:50.545  WARN 1 --- [           main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+ecommerceapp_1      | 2019-10-04 00:44:51.153  INFO 1 --- [           main] o.s.s.web.DefaultSecurityFilterChain     : Creating filter chain: any request, [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@79179359, org.springframework.security.web.context.SecurityContextPersistenceFilter@55493582, org.springframework.security.web.header.HeaderWriterFilter@b2c5e07, org.springframework.web.filter.CorsFilter@dbd8e44, org.springframework.security.web.authentication.logout.LogoutFilter@52c3cb31, com.example.demo.security.JWTAuthenticationFilter@51acdf2e, com.example.demo.security.JWTAuthorizationFilter@6a55299e, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6b88ca8c, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@34158c08, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2f1de2d6, org.springframework.security.web.session.SessionManagementFilter@4426bff1, org.springframework.security.web.access.ExceptionTranslationFilter@5bf8fa12, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@40238dd0]
+jenkins_1           | 2019-10-04 00:44:51.453+0000 [id=25]    INFO    jenkins.install.SetupWizard#init:
+jenkins_1           |
+jenkins_1           | *************************************************************
+jenkins_1           | *************************************************************
+jenkins_1           | *************************************************************
+jenkins_1           |
+jenkins_1           | Jenkins initial setup is required. An admin user has been created and a password generated.
+jenkins_1           | Please use the following password to proceed to installation:
+jenkins_1           |
+jenkins_1           | 76592c6233b243baafda7fa38b90d9c4
+jenkins_1           |
+jenkins_1           | This may also be found at: /var/jenkins_home/secrets/initialAdminPassword
+jenkins_1           |
+jenkins_1           | *************************************************************
+jenkins_1           | *************************************************************
+jenkins_1           | *************************************************************
+jenkins_1           |
+ecommerceapp_1      | 2019-10-04 00:44:52.040  INFO 1 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+ecommerceapp_1      | 2019-10-04 00:44:53.851  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+ecommerceapp_1      | 2019-10-04 00:44:53.863  INFO 1 --- [           main] com.example.demo.SareetaApplication      : Started SareetaApplication in 35.752 seconds (JVM running for 39.785)
+jenkins_1           | 2019-10-04 00:45:06.012+0000 [id=39]    INFO    hudson.model.UpdateSite#updateData: Obtained the latest update center data file for UpdateSource default
+jenkins_1           | 2019-10-04 00:45:08.181+0000 [id=39]    INFO    h.m.DownloadService$Downloadable#load: Obtained the updated data file for hudson.tasks.Maven.MavenInstaller
+jenkins_1           | 2019-10-04 00:45:08.182+0000 [id=39]    INFO    hudson.util.Retrier#start: Performed the action check updates server successfully at the attempt #1
+jenkins_1           | 2019-10-04 00:45:08.190+0000 [id=39]    INFO    hudson.model.AsyncPeriodicWork$1#run: Finished Download metadata. 25,859 ms
+jenkins_1           | 2019-10-04 00:45:08.893+0000 [id=25]    INFO    hudson.model.UpdateSite#updateData: Obtained the latest update center data file for UpdateSource default
+splunkenterprise_1  | Copying '/opt/splunk/etc/openldap/ldap.conf.default' to '/opt/splunk/etc/openldap/ldap.conf'.
+splunkenterprise_1  | Generating RSA private key, 2048 bit long modulus
+splunkenterprise_1  | ............................................+++
+splunkenterprise_1  | .................................................+++
+splunkenterprise_1  | e is 65537 (0x10001)
+splunkenterprise_1  | writing RSA key
+splunkenterprise_1  |
+splunkenterprise_1  | Generating RSA private key, 2048 bit long modulus
+splunkenterprise_1  | ....+++
+splunkenterprise_1  | .......................................+++
+splunkenterprise_1  | e is 65537 (0x10001)
+splunkenterprise_1  | writing RSA key
+splunkenterprise_1  |
+splunkenterprise_1  | Moving '/opt/splunk/share/splunk/search_mrsparkle/modules.new' to '/opt/splunk/share/splunk/search_mrsparkle/modules'.
+jenkins_1           | 2019-10-04 00:45:09.917+0000 [id=25]    INFO    jenkins.InitReactorRunner$1#onAttained: Completed initialization
+jenkins_1           | 2019-10-04 00:45:09.984+0000 [id=19]    INFO    hudson.WebAppMain$3#run: Jenkins is fully up and running
+splunkenterprise_1  |
+splunkenterprise_1  | This appears to be your first time running this version of Splunk.
+splunkenterprise_1  |
+splunkenterprise_1  | Splunk> Take the sh out of IT.
+splunkenterprise_1  |
+splunkenterprise_1  | Checking prerequisites...
+splunkenterprise_1  |     Checking http port [8000]: open
+splunkenterprise_1  |     Checking mgmt port [8089]: open
+splunkenterprise_1  |     Checking appserver port [127.0.0.1:8065]: open
+splunkenterprise_1  |     Checking kvstore port [8191]: open
+splunkenterprise_1  |     Checking configuration...  Done.
+splunkenterprise_1  | New certs have been generated in '/opt/splunk/etc/auth'.
+splunkenterprise_1  |     Checking critical directories...    Done
+splunkenterprise_1  |     Checking indexes...
+splunkenterprise_1  |         Validated: _audit _internal _introspection _telemetry _thefishbucket history main summary
+splunkenterprise_1  |     Done
+splunkenterprise_1  |         Creating: /opt/splunk/var/lib/splunk
+splunkenterprise_1  |         Creating: /opt/splunk/var/run/splunk
+splunkenterprise_1  |         Creating: /opt/splunk/var/run/splunk/appserver/i18n
+splunkenterprise_1  |         Creating: /opt/splunk/var/run/splunk/appserver/modules/static/css
+splunkenterprise_1  |         Creating: /opt/splunk/var/run/splunk/upload
+splunkenterprise_1  |         Creating: /opt/splunk/var/spool/splunk
+splunkenterprise_1  |         Creating: /opt/splunk/var/spool/dirmoncache
+splunkenterprise_1  |         Creating: /opt/splunk/var/lib/splunk/authDb
+splunkenterprise_1  |         Creating: /opt/splunk/var/lib/splunk/hashDb
+splunkenterprise_1  |     Checking filesystem compatibility...  Done
+splunkenterprise_1  |     Checking conf files for problems...
+splunkenterprise_1  |     Done
+splunkenterprise_1  |     Checking default conf files for edits...
+splunkenterprise_1  |     Validating installed files against hashes from '/opt/splunk/splunk-7.0.3-fa31da744b51-linux-2.6-x86_64-manifest'
+splunkenterprise_1  | Generating a 2048 bit RSA private key
+splunkenterprise_1  | ..+++
+splunkenterprise_1  | ..................+++
+splunkenterprise_1  | writing new private key to 'privKeySecure.pem'
+splunkenterprise_1  | -----
+splunkenterprise_1  | Signature ok
+splunkenterprise_1  | subject=/CN=splunkenterprise/O=SplunkUser
+splunkenterprise_1  | Getting CA Private Key
+splunkenterprise_1  | writing RSA key
+splunkenterprise_1  |     All installed files intact.
+splunkenterprise_1  |     Done
+splunkenterprise_1  | All preliminary checks passed.
+splunkenterprise_1  |
+splunkenterprise_1  | Starting splunk server daemon (splunkd)...
+splunkenterprise_1  | Done
+splunkenterprise_1  |
+splunkenterprise_1  |
+splunkenterprise_1  | Waiting for web server at http://127.0.0.1:8000 to be available........ Done
+splunkenterprise_1  |
+splunkenterprise_1  |
+splunkenterprise_1  | If you get stuck, we're here to help.
+splunkenterprise_1  | Look for answers here: http://docs.splunk.com
+splunkenterprise_1  |
+splunkenterprise_1  | The Splunk web interface is at http://splunkenterprise:8000
+splunkenterprise_1  |
+splunkenterprise_1  | Listening for Splunk data on TCP port 9997.
+splunkenterprise_1  | Listening for data on TCP port 1514.
+jenkins_1           | 2019-10-04 00:46:30.439+0000 [id=12]    INFO    o.k.s.LocaleDrivenResourceProvider#getLocaleDrivenResourceProviders: Registered LocaleDrivenResourceProvider: jenkins.MetaLocaleDrivenResourceProvider@54cea68

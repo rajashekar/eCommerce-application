@@ -67,6 +67,8 @@ public class OrderControllerTest {
 
         List<UserOrder> resOrders = response.getBody();
         assertEquals(userOrders.size(), resOrders.size());
+        assertEquals(userOrders.get(0).getTotal(), resOrders.get(0).getTotal());
+        assertEquals(userOrders.get(0).getUser().getUsername(), resOrders.get(0).getUser().getUsername());
     }
 
     @Test

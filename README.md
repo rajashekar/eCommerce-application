@@ -1,108 +1,304 @@
 # eCommerce Application
 
-In this project, you'll have an opportunity to demonstrate the security and DevOps skills that you learned in this lesson by completing an eCommerce application. You'll start with a template for the complete application, and your goal will be to take this template and add proper authentication and authorization controls so users can only access their data, and that data can only be accessed in a secure way. 
+This Project is  done as part of Udacity Java developer course. The purpose of the project is to understand the concepts of JWT authentication and authorization so users can only access their data, and that data can only be accessed in a secure way, logging using slf4j (Simple Logging Facade for Java), unit testing, indexing logs in splunk, configuring jenkins for CI/CD. 
 
-## Project Template
-First, you'll want to get set up with the template. The template is written in Java using Spring Boot, Hibernate ORM, and the H2 database. H2 is an in memory database, so if you need to retry something, every application startup is a fresh copy.
+## Pre-requisites
+- JDK 1.8
+- Maven 3.6.1 - https://maven.apache.org/download.cgi
+- Docker and docker-compose
 
-To use the template, import it in the IDE of your choice as a Spring Boot application. Where required, this readme assumes the eclipse IDE.
+## Getting Started
 
-Once the project is set up, you will see 5 packages:
-
-* demo - this package contains the main method which runs the application
-
-* model.persistence - this package contains the data models that Hibernate persists to H2. There are 4 models: Cart, for holding a User's items; Item , for defining new items; User, to hold user account information; and UserOrder, to hold information about submitted orders. Looking back at the application “demo” class, you'll see the `@EntityScan` annotation, telling Spring that this package contains our data models
-
-* model.persistence.repositories - these contain a `JpaRepository` interface for each of our models. This allows Hibernate to connect them with our database so we can access data in the code, as well as define certain convenience methods. Look through them and see the methods that have been declared. Looking at the application “demo” class, you’ll see the `@EnableJpaRepositories` annotation, telling Spring that this package contains our data repositories.
-
-* model.requests - this package contains the request models. The request models will be transformed by Jackson from JSON to these models as requests are made. Note the `Json` annotations, telling Jackson to include and ignore certain fields of the requests. You can also see these annotations on the models themselves.
-
-* controllers - these contain the api endpoints for our app, 1 per model. Note they all have the `@RestController` annotation to allow Spring to understand that they are a part of a REST API
-
-In resources, you'll see the application configuration that sets up our database and Hibernate, It also contains a data.sql file with a couple of items to populate the database with. Spring will run this file every time the application starts
-
-In eclipse, you can right click the project and click  “run as” and select Spring Boot application. The application should tell you it’s starting in the console view. Once started, using a REST client, such as Postman, explore the APIs.
-
-Some examples are as below:
-To create a new user for example, you would send a POST request to:
-http://localhost:8080/api/user/create with an example body like 
-
+### Clone the repository
 ```
-{
-    "username": "test"
-}
+https://github.com/rajashekar/eCommerce-application.git
+cd eCommerce-application
 ```
 
-
-and this would return
+### Testing the ecommerce application
+Start using Maven
 ```
-{
-    "id" 1,
-    "username": "test"
-}
+mvn spring-boot:run
 ```
 
+OR 
 
-Exercise:
-Once you've created a user, try  to add items to cart (see the `ModifyCartRequest` class) and submit an order. 
-
-## Adding Authentication and Authorization
-We need to add proper authentication and authorization controls so users can only access their data, and that data can only be accessed in a secure way. We will do this using a combination of usernames and passwords for authentication, as well as JSON Web Tokens (JWT) to handle the authorization.
-
-As stated prior, we will implement a password based authentication scheme. To do this, we need to store the users' passwords in a secure way. This needs to be done with hashing, and it's this hash which should be stored. Additionally when viewing their user information, the user's hash should not be returned to them in the response, You should also add some requirements and validation, as well as a confirm field in the request, to make sure they didn't make a typo. 
-
-1. Add spring security dependencies: 
-   * Spring-boot-starter-security
-1. JWT does not ship as a part of spring security, so you will have to add the 
-   * java-jwt dependency to your project. 
-1. Spring Boot ships with an automatically configured security module that must be disabled, as we will be implementing our own. This must be done in the Application class.
-2. Create password for the user
-3. Once that is disabled, you will need to implement 4 classes (at minimum, you can break it down however you like):
-   * a subclass of `UsernamePasswordAuthenticationFilter` for taking the username and password from a login request and logging in. This, upon successful authentication, should hand back a valid JWT in the `Authorization` header
-   * a subclass of `BasicAuthenticationFilter`. 
-   * an implementation of the `UserDetailsService` interface. This should take a username and return a userdetails User instance with the user's username and hashed password.
-   *  a subclass of `WebSecurityConfigurerAdapter`. This should attach your user details service implementation to Spring's `AuthenticationManager`. It also handles session management and what endpoints are secured. For us, we manage the session so session management should be disabled. Your filters should be added to the authentication chain and every endpoint but 1 should have security required. The one that should not is the one responsible for creating new users.
-
-
-Once all this is setup, you can use Spring's default /login endpoint to login like so
-
+Run using docker
 ```
-POST /login 
-{
-    "username": "test",
-    "password": "somepassword"
-}
-```
-
-and that should, if those are valid credentials, return a 200 OK with an Authorization header which looks like "Bearer <data>" this "Bearer <data>" is a JWT and must be sent as a Authorization header for all other rqeuests. If it's not present, endpoints should return 401 Unauthorized. If it's present and valid, the endpoints should function as normal.
-
-## Testing
-You must implement unit tests demonstrating at least 80% code coverage.
-
-```
+mvn clean package
 docker build -t ecommerce-app .
-```
-
-```
 docker run -p 8080:8080 -t ecommerce-app
 ```
 
+OR 
+
+Run using docker-compose
 ```
-SPLUNK_STANDALONE_URL=<splunk-server-name>:<splunk-receive-port> SPLUNK_PASSWORD=<password> docker-compose up
+mvn clean deploy
+docker-compose up -d 
 ```
 
-example - 
+Note 1: `mvn clean deploy` will run build, tests, package, build image and deploy image to registry like docker hub. <br>
+Note 2: ~/.m2/settings-security.xml will have master password settings, which is generated using `mvn --encrypt-master-password`
 ```
-SPLUNK_STANDALONE_URL=11.22.33.44:9997 SPLUNK_PASSWORD=splunkpass docker-compose up
+<settingsSecurity>
+    <master>{rXXXXXX=}</master>
+</settingsSecurity>
+```
+Note 3 : ~/.m2/settings.xml will have registry details to where you want to push for example docker hub. Password is encrypted using `mvn --encrypt-password`
+```
+   <server>
+        <id>registry.hub.docker.com</id>
+        <username>dockerlogin</username>
+        <password>{rYYYYYYYY=}</password>
+        <configuration>
+            <email>myemail@gmail.com</email>
+        </configuration>
+    </server>
 ```
 
+if you are running on Mac, spotify dockerfile maven plugin might complain like below
+```
+Request error: GET unix://localhost:80/version: 503, body: <html>
+```
+Try setting docker_host like below and try `mvn clean deploy` again. 
+```
+export DOCKER_HOST=unix:///var/run/docker.sock
+```
+
+To verify test cases
+```
+mvn clean test
+```
+Current coverage is 75%
+<img src='img/coverage.png'>
+
+
+### Deploying all apps using docker-compose
+Deploying ecommerce application, splunk, jenkins. 
+If you want to do only in local just do `docker-compose up -d`
+which will run ecommerce application, jenkins, splunk and splunk forwarder all at once.
+
+If you want to deploy in AWS you can follow below steps
+in AWS, take any free tier with docker support
+<img src='img/aws_free_tier.png'>
+
+Please make sure you open below ports
+<img src='img/aws_ports.png'>
+
+After instance is up, login to that instance, install git and docker
 ```
 sudo yum install git
 sudo yum install docker
+```
+append docker to user group and start docker
+```
 sudo usermod -a -G docker $USER
 sudo service docker start
-git clone https://github.com/rajashekar/eCommerce-application.git
+```
+
+Install docker compose and give permissions
+```
 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
-docker-compose up
 ```
+
+Clone this repository
+```
+git clone https://github.com/rajashekar/eCommerce-application.git
+cd eCommerce-application
+```
+
+now run
+```
+docker-compose up -d
+```
+Note: by removing `-d` you can see all [start up logs of all applications](logs/docker-compose.logs) at console <br>
+Example - 
+```
+ec2-user@ip-172-31-47-128 eCommerce-application]$ docker-compose up -d
+Starting ecommerce-application_jenkins_1          ... done
+Starting ecommerce-application_ecommerceapp_1     ... done
+Starting ecommerce-application_splunkenterprise_1 ... done
+Starting ecommerce-application_splunkforwarder_1  ... done
+```
+
+Now above command will start 4 applications which are defined in [docker-compose.yml](docker-compose.yml)  <br>
+Do `docker ps` to find all container apps which are running. 
+
+<img src='img/dockerps.png'>
+- eCommerce application running at 8081
+- splunk running at 8000
+- splunk forwarder 
+- jenkins running at 8080
+
+### Configuring jenkins
+Go to http://your-hostname:8080/ to configure jenkins
+- Unlock jenkins using `/var/jenkins_home/secrets/initialAdminPassword`
+- Create First Admin user
+- Install Git hub plugins
+<img src='img/jenkins_plugins.png'>
+- Generate ssh keys and private key in jenkins credentials
+- Add your public key to deploy keys in github repo. 
+<img src='img/github_deploykeys.png'>
+- To configure maven go to Jenkins => Global Tool Configuration 
+<img src='img/jenkins_maven.png'>
+- configure new project, provide github and git details
+<img src='img/jenkins_configure_git.png'>
+- configure auto build triggers when commit happens. Check `Github hook trigger for GITScm polling`
+<img src='img/jenkins_build_triggers.png'>
+- configure maven settings. Set maven version and goals <br>
+You can login to jenkins image using `docker exec -it <jenkins-container-id> bash`<br>
+Create settings.xml and settings-security.xml and refer those paths like below.
+<img src='img/jenkins_maven_settings.png'>
+- To trigger builds on commit add jenkins webhook details in github
+<img src='img/github_webhooks.png'>
+- Verify builds are triggering after commit
+<img src='img/jenkins_autobuild.png'>
+- Refer jenkins [build and deployment logs](logs/jenkins.logs).
+
+### Configuring splunk forwarder
+Splunk forwarder is monitoring `/logs` folder in `log_volume` which is also shared by `ecommerceapp` service which logging at `/logs/ecommerceapp-application.log` <br>
+Note 1 : If both splunk and splunk forwarder are running in same instance using docker compose, use `SPLUNK_FORWARD_SERVER` with value of splunk service name in this case it is `splunkenterprise` which is listening for events on `9997` port. <br>
+Note 2 : If you want splunk to be run on a seperate instance, like using AWS splunk enterprise then use `SPLUNK_STANDALONE_URL` with value of AWS splunk enterprise server ip and listening port `9997`. You can use below command to pass `SPLUNK_STANDALONE_URL` and `SPLUNK_PASSWORD` to docker-compose if you do not want to share above details in docker-compose.yml
+```
+SPLUNK_STANDALONE_URL=<splunk-server-name>:<splunk-receive-port> SPLUNK_PASSWORD=<password> docker-compose up -d
+```
+
+### Verifying eCommerce applicaiton 
+- Create user 
+```
+curl -v -H 'Content-type: application/json' ec2-54-92-129-250.compute-1.amazonaws.com:8081/api/user/create -d '{"username": "Raj4", "password": "password", "confirmPassword": "password"}'
+*   Trying 54.92.129.250...
+* TCP_NODELAY set
+* Connected to ec2-54-92-129-250.compute-1.amazonaws.com (54.92.129.250) port 8081 (#0)
+> POST /api/user/create HTTP/1.1
+> Host: ec2-54-92-129-250.compute-1.amazonaws.com:8081
+> User-Agent: curl/7.54.0
+> Accept: */*
+> Content-type: application/json
+> Content-Length: 75
+>
+* upload completely sent off: 75 out of 75 bytes
+< HTTP/1.1 200
+< X-Content-Type-Options: nosniff
+< X-XSS-Protection: 1; mode=block
+< Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+< Pragma: no-cache
+< Expires: 0
+< X-Frame-Options: DENY
+< Content-Type: application/json;charset=UTF-8
+< Transfer-Encoding: chunked
+< Date: Fri, 04 Oct 2019 00:51:49 GMT
+<
+* Connection #0 to host ec2-54-92-129-250.compute-1.amazonaws.com left intact
+{"id":1,"username":"Raj4"}%
+```
+- On login got `Authorization` header
+```
+curl -v -H 'Content-type: application/json' ec2-54-92-129-250.compute-1.amazonaws.com:8081/login -d '{"username": "Raj4", "password": "password"}'
+*   Trying 54.92.129.250...
+* TCP_NODELAY set
+* Connected to ec2-54-92-129-250.compute-1.amazonaws.com (54.92.129.250) port 8081 (#0)
+> POST /login HTTP/1.1
+> Host: ec2-54-92-129-250.compute-1.amazonaws.com:8081
+> User-Agent: curl/7.54.0
+> Accept: */*
+> Content-type: application/json
+> Content-Length: 44
+>
+* upload completely sent off: 44 out of 44 bytes
+< HTTP/1.1 200
+< Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJSYWo0IiwiZXhwIjoxNTcxMDMxODE4fQ.xG0IYe1hE55eOF5HkycpivsV1G0MTK6y3MN2Sf5j9NyF6WZ4UzfPyg5DzsazdiWsX49MvIfD26OK0dgkOPK_zw
+< X-Content-Type-Options: nosniff
+< X-XSS-Protection: 1; mode=block
+< Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+< Pragma: no-cache
+< Expires: 0
+< X-Frame-Options: DENY
+< Content-Length: 0
+< Date: Fri, 04 Oct 2019 05:43:38 GMT
+<
+* Connection #0 to host ec2-54-92-129-250.compute-1.amazonaws.com left intact
+```
+- Accessing `/api/user/<userid>` without `Authorization` header results in `403`
+```
+curl -v -H 'Content-type: application/json' ec2-54-92-129-250.compute-1.amazonaws.com:8081/api/user/Raj4 
+*   Trying 54.92.129.250...
+* TCP_NODELAY set
+* Connected to ec2-54-92-129-250.compute-1.amazonaws.com (54.92.129.250) port 8081 (#0)
+> GET /api/user/Raj4 HTTP/1.1
+> Host: ec2-54-92-129-250.compute-1.amazonaws.com:8081
+> User-Agent: curl/7.54.0
+> Accept: */*
+> Content-type: application/json
+>
+< HTTP/1.1 403
+< X-Content-Type-Options: nosniff
+< X-XSS-Protection: 1; mode=block
+< Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+< Pragma: no-cache
+< Expires: 0
+< X-Frame-Options: DENY
+< Content-Type: application/json;charset=UTF-8
+< Transfer-Encoding: chunked
+< Date: Fri, 04 Oct 2019 05:44:50 GMT
+<
+* Connection #0 to host ec2-54-92-129-250.compute-1.amazonaws.com left intact
+{"timestamp":"2019-10-04T05:44:50.260+0000","status":403,"error":"Forbidden","message":"Access Denied","path":"/api/user/Raj4"}%
+```
+- On giving `Authorization` header, `/api/user/<userid>` is success. 
+```
+curl -v -H 'Content-type: application/json' ec2-54-92-129-250.compute-1.amazonaws.com:8081/api/user/Raj4 -H 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJSYWo0IiwiZXhwIjoxNTcxMDMxODE4fQ.xG0IYe1hE55eOF5HkycpivsV1G0MTK6y3MN2Sf5j9NyF6WZ4UzfPyg5DzsazdiWsX49MvIfD26OK0dgkOPK_zw'
+*   Trying 54.92.129.250...
+* TCP_NODELAY set
+* Connected to ec2-54-92-129-250.compute-1.amazonaws.com (54.92.129.250) port 8081 (#0)
+> GET /api/user/Raj4 HTTP/1.1
+> Host: ec2-54-92-129-250.compute-1.amazonaws.com:8081
+> User-Agent: curl/7.54.0
+> Accept: */*
+> Content-type: application/json
+> Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJSYWo0IiwiZXhwIjoxNTcxMDMxODE4fQ.xG0IYe1hE55eOF5HkycpivsV1G0MTK6y3MN2Sf5j9NyF6WZ4UzfPyg5DzsazdiWsX49MvIfD26OK0dgkOPK_zw
+>
+< HTTP/1.1 200
+< X-Content-Type-Options: nosniff
+< X-XSS-Protection: 1; mode=block
+< Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+< Pragma: no-cache
+< Expires: 0
+< X-Frame-Options: DENY
+< Content-Type: application/json;charset=UTF-8
+< Transfer-Encoding: chunked
+< Date: Fri, 04 Oct 2019 05:47:05 GMT
+<
+* Connection #0 to host ec2-54-92-129-250.compute-1.amazonaws.com left intact
+{"id":1,"username":"Raj4"}%
+```
+### Configuring splunk
+Go to http://your-hostname:8000/ to configure splunk
+- You will be prompted with below page with initial admin password. Change passowrd after login.
+<img src='img/splunk_login.png'>
+- If you choose aws ec2 with minimal configuration which only gave 8 GB hard disk space, you will end up with below issue. 
+For example - In my case, I only have 2.7 GB left. 
+```
+[root@ip-172-31-47-128 _data]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+devtmpfs        483M   60K  483M   1% /dev
+tmpfs           493M     0  493M   0% /dev/shm
+/dev/xvda1      7.9G  5.1G  2.7G  66% /
+```
+<img src='img/splunk_space_issue.png'>
+
+- To resolve this <br> 1) login to splunk container using `docker exec -it <splunk-container-id> bash` <br> 2) do `apt-get update` and `apt-get install vim` <br> 3) do `vi ./etc/system/default/server.conf` change `minFreeSpace` from 5000 (i.e 5GiB) to 1000 (i.e 1GiB).
+
+- After above settings, restart splunk which should resolve above issue and on click data summary you should see `splunkforwarder` like below 
+<img src='img/splunkforwarder.png'>
+
+- Configure splunk alert
+<img src='img/splunk_alerts.png'>
+
+- Configure splunk dashboard
+<img src='img/splunk_dashboard.png'>
+
+## Contributing
+This repository is done as part of Udacity Java developer. Therefore, most likely will not accept any pull requests.
