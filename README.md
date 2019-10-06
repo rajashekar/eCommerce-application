@@ -30,6 +30,14 @@ docker build -t ecommerce-app .
 docker run -p 8080:8080 -t ecommerce-app
 ```
 
+OR
+
+Build and run inside docker using mvn.
+```
+docker build -f Dockerfile_mvn -t ecommerce-app .
+docker run -p 8080:8080 -t ecommerce-app
+```
+
 OR 
 
 Run using docker-compose
@@ -37,6 +45,11 @@ Run using docker-compose
 mvn clean deploy
 docker-compose up -d 
 ```
+You can also up each instance 
+- To start eCommerce application `docker-compose -f docker-compose-app.yml up`
+- To start jenkins `docker-compose -f docker-compose-jenkins.yml up`
+- To start splunk `docker-compose -f docker-compose-splunk.yml up`
+- To start splunk forwarder `docker-compose -f docker-compose-splunk-forward.yml up`
 
 Note 1: `mvn clean deploy` will run build, tests, package, build image and deploy image to registry like docker hub. <br>
 Note 2: ~/.m2/settings-security.xml will have master password settings, which is generated using `mvn --encrypt-master-password`
@@ -72,7 +85,6 @@ mvn clean test
 ```
 Current coverage is 75%
 <img src='img/coverage.png'>
-
 
 ### Deploying all apps using docker-compose
 Deploying ecommerce application, splunk, jenkins. 
@@ -134,28 +146,21 @@ Do `docker ps` to find all container apps which are running.
 
 ### Configuring jenkins
 Go to http://your-hostname:8080/ to configure jenkins
-- Unlock jenkins using `/var/jenkins_home/secrets/initialAdminPassword`
-- Create First Admin user
-- Install Git hub plugins
-<img src='img/jenkins_plugins.png'>
-- Generate ssh keys and private key in jenkins credentials
-- Add your public key to deploy keys in github repo. 
-<img src='img/github_deploykeys.png'>
-- To configure maven go to Jenkins => Global Tool Configuration 
-<img src='img/jenkins_maven.png'>
-- configure new project, provide github and git details
-<img src='img/jenkins_configure_git.png'>
-- configure auto build triggers when commit happens. Check `Github hook trigger for GITScm polling`
-<img src='img/jenkins_build_triggers.png'>
-- configure maven settings. Set maven version and goals <br>
+1) Unlock jenkins using `/var/jenkins_home/secrets/initialAdminPassword`
+2) Create First Admin user
+3) Install Git hub plugins <img src='img/jenkins_plugins.png'>
+4) Generate ssh keys and private key in jenkins credentials
+5) Add your public key to deploy keys in github repo. <img src='img/github_deploykeys.png'>
+6) To configure maven go to Jenkins => Global Tool Configuration <img src='img/jenkins_maven.png'>
+7) configure new project, provide github and git details <img src='img/jenkins_configure_git.png'>
+9) configure auto build triggers when commit happens. Check `Github hook trigger for GITScm polling` <img src='img/jenkins_build_triggers.png'>
+10) configure maven settings. Set maven version and goals <br>
 You can login to jenkins image using `docker exec -it <jenkins-container-id> bash`<br>
-Create settings.xml and settings-security.xml and refer those paths like below.
+Create settings.xml and settings-security.xml and refer those paths like below. <br>
 <img src='img/jenkins_maven_settings.png'>
-- To trigger builds on commit add jenkins webhook details in github
-<img src='img/github_webhooks.png'>
-- Verify builds are triggering after commit
-<img src='img/jenkins_autobuild.png'>
-- Refer jenkins [build and deployment logs](logs/jenkins.logs).
+11) To trigger builds on commit add jenkins webhook details in github <img src='img/github_webhooks.png'>
+12) Verify builds are triggering after commit <img src='img/jenkins_autobuild.png'>
+13) Refer jenkins [build and deployment logs](logs/jenkins.logs).
 
 ### Configuring splunk forwarder
 Splunk forwarder is monitoring `/logs` folder in `log_volume` which is also shared by `ecommerceapp` service which logging at `/logs/ecommerceapp-application.log` <br>
@@ -166,7 +171,7 @@ SPLUNK_STANDALONE_URL=<splunk-server-name>:<splunk-receive-port> SPLUNK_PASSWORD
 ```
 
 ### Verifying eCommerce applicaiton 
-- Create user 
+1) Create user 
 ```
 curl -v -H 'Content-type: application/json' ec2-54-92-129-250.compute-1.amazonaws.com:8081/api/user/create -d '{"username": "Raj4", "password": "password", "confirmPassword": "password"}'
 *   Trying 54.92.129.250...
@@ -194,7 +199,7 @@ curl -v -H 'Content-type: application/json' ec2-54-92-129-250.compute-1.amazonaw
 * Connection #0 to host ec2-54-92-129-250.compute-1.amazonaws.com left intact
 {"id":1,"username":"Raj4"}%
 ```
-- On login got `Authorization` header
+2) On login got `Authorization` header
 ```
 curl -v -H 'Content-type: application/json' ec2-54-92-129-250.compute-1.amazonaws.com:8081/login -d '{"username": "Raj4", "password": "password"}'
 *   Trying 54.92.129.250...
@@ -221,7 +226,7 @@ curl -v -H 'Content-type: application/json' ec2-54-92-129-250.compute-1.amazonaw
 <
 * Connection #0 to host ec2-54-92-129-250.compute-1.amazonaws.com left intact
 ```
-- Accessing `/api/user/<userid>` without `Authorization` header results in `403`
+3) Accessing `/api/user/<userid>` without `Authorization` header results in `403`
 ```
 curl -v -H 'Content-type: application/json' ec2-54-92-129-250.compute-1.amazonaws.com:8081/api/user/Raj4 
 *   Trying 54.92.129.250...
@@ -247,7 +252,7 @@ curl -v -H 'Content-type: application/json' ec2-54-92-129-250.compute-1.amazonaw
 * Connection #0 to host ec2-54-92-129-250.compute-1.amazonaws.com left intact
 {"timestamp":"2019-10-04T05:44:50.260+0000","status":403,"error":"Forbidden","message":"Access Denied","path":"/api/user/Raj4"}%
 ```
-- On giving `Authorization` header, `/api/user/<userid>` is success. 
+4) On giving `Authorization` header, `/api/user/<userid>` is success. 
 ```
 curl -v -H 'Content-type: application/json' ec2-54-92-129-250.compute-1.amazonaws.com:8081/api/user/Raj4 -H 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJSYWo0IiwiZXhwIjoxNTcxMDMxODE4fQ.xG0IYe1hE55eOF5HkycpivsV1G0MTK6y3MN2Sf5j9NyF6WZ4UzfPyg5DzsazdiWsX49MvIfD26OK0dgkOPK_zw'
 *   Trying 54.92.129.250...
@@ -276,10 +281,8 @@ curl -v -H 'Content-type: application/json' ec2-54-92-129-250.compute-1.amazonaw
 ```
 ### Configuring splunk
 Go to http://your-hostname:8000/ to configure splunk
-- You will be prompted with below page with initial admin password. Change passowrd after login.
-<img src='img/splunk_login.png'>
-- If you choose aws ec2 with minimal configuration which only gave 8 GB hard disk space, you will end up with below issue. 
-For example - In my case, I only have 2.7 GB left. 
+1) You will be prompted with below page with initial admin password. Change passowrd after login. <img src='img/splunk_login.png'>
+2) If you choose aws ec2 with minimal configuration which only gave 8 GB hard disk space, you will end up with below issue. For example - In my case, I only have 2.7 GB left. 
 ```
 [root@ip-172-31-47-128 _data]# df -h
 Filesystem      Size  Used Avail Use% Mounted on
@@ -288,17 +291,13 @@ tmpfs           493M     0  493M   0% /dev/shm
 /dev/xvda1      7.9G  5.1G  2.7G  66% /
 ```
 <img src='img/splunk_space_issue.png'>
-
-- To resolve this <br> 1) login to splunk container using `docker exec -it <splunk-container-id> bash` <br> 2) do `apt-get update` and `apt-get install vim` <br> 3) do `vi ./etc/system/default/server.conf` change `minFreeSpace` from 5000 (i.e 5GiB) to 1000 (i.e 1GiB).
-
-- After above settings, restart splunk which should resolve above issue and on click data summary you should see `splunkforwarder` like below 
-<img src='img/splunkforwarder.png'>
-
-- Configure splunk alert
-<img src='img/splunk_alerts.png'>
-
-- Configure splunk dashboard
-<img src='img/splunk_dashboard.png'>
+3) To resolve this <br>
+a) login to splunk container using `docker exec -it <splunk-container-id> bash` <br>
+b) do `apt-get update` and `apt-get install vim` <br>
+c) do `vi ./etc/system/default/server.conf` change `minFreeSpace` from 5000 (i.e 5GiB) to 1000 (i.e 1GiB). <br>
+4) After above settings, restart splunk which should resolve above issue and on click data summary you should see `splunkforwarder` like below <img src='img/splunkforwarder.png'>
+5) Configure splunk alert <img src='img/splunk_alerts.png'>
+6) Configure splunk dashboard <img src='img/splunk_dashboard.png'>
 
 ## Contributing
 This repository is done as part of Udacity Java developer. Therefore, most likely will not accept any pull requests.
