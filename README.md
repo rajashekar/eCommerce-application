@@ -1,6 +1,6 @@
 # eCommerce Application
 
-This Project is  done as part of Udacity Java developer course. The purpose of the project is to understand the concepts of JWT authentication and authorization so users can only access their data, and that data can only be accessed in a secure way, logging using slf4j (Simple Logging Facade for Java), unit testing, indexing logs in splunk, configuring jenkins for CI/CD. 
+The purpose of the project is to understand the concepts of JWT authentication and authorization so users can only access their data, and that data can only be accessed in a secure way, logging using slf4j (Simple Logging Facade for Java), unit testing, indexing logs in splunk, configuring jenkins for CI/CD. 
 
 ## Pre-requisites
 - JDK 1.8
